@@ -35,12 +35,12 @@ def get_season_4_table(url):
             
             if (
                 type_value == 'U. Awakening'
-                and not gl_tracking_value
+                and (gl_tracking_value == '' or gl_tracking_value == 'Skipped')
                 and re.search(r'NV', description_value)
             ):
                 table_data.append({
-                    'Date': row_data.get('Date', ''),
-                    'Description': description_value
+                    row_data.get('Date', ''): {
+                    'U. Awakening': description_value}
                 })
         
         return table_data
@@ -57,4 +57,5 @@ result = get_season_4_table(url)
 
 # Display the result in pretty formatted JSON
 if result:
-    print(json.dumps(result, indent=2))
+    for record in result:
+        print(json.dumps(record, separators=(',', ':')))
